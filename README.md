@@ -1,22 +1,15 @@
 # Hands on lowbrow exploration of GraphRAG in Python<!-- omit in toc -->
 
 - [Introduction](#introduction)
-- [Docker](#docker)
 - [Running things: the simple extraction use case](#running-things-the-simple-extraction-use-case)
-  - [Notes](#notes)
+- [Running with Docker](#running-with-docker)
 - [Further advanced document "chunkings"](#further-advanced-document-chunkings)
 - [Visually explore the resulting knowledge graph (with neo4j web UI)](#visually-explore-the-resulting-knowledge-graph-with-neo4j-web-ui)
 - [Use the knowledge graph programmatically](#use-the-knowledge-graph-programmatically)
-  - [Displaying knowledge graph main characteristics](#displaying-knowledge-graph-main-characteristics)
-  - [Searching the database](#searching-the-database)
 - [Dump/Restore the database content for later usage](#dumprestore-the-database-content-for-later-usage)
 - [Scripting things](#scripting-things)
-  - [Collecting Gold Dust](#collecting-gold-dust)
 - [References](#references)
 - [Next steps](#next-steps)
-  - [Improve observability](#improve-observability)
-  - [Improve the (graph) extraction process](#improve-the-graph-extraction-process)
-  - [Ingesting a Markdown file](#ingesting-a-markdown-file)
 
 ## Introduction
 
@@ -72,16 +65,17 @@ The original associated code, from which this work is partly derived, is availab
 Build the image from the repository root:
 
 ```bash
-docker build -f DockerContext/Dockerfile -t jj_build_knowledge_graph .
+docker build -t jejuness:jj_build_knowledge_graph https://github.com/EricBoix/jj_build_knowledge_graph.git#:DockerContext
 ```
 
 Run the extraction (adjust paths and `.env` as needed):
 
 ```bash
 docker run --rm \
-  --env-file .env \
   -v /path/to/data:/data \
-  jj_build_knowledge_graph \
+  -v `pwd`:/credentials \
+  --env-file /credentials/.env \
+  jejuness:jj_build_knowledge_graph \
   python extracting_graph.py --input_directory /data --load_markdown_document file.md
 ```
 
