@@ -68,6 +68,12 @@ Build the image from the repository root:
 docker build -t jejuness:jj_build_knowledge_graph https://github.com/EricBoix/jj_build_knowledge_graph.git#:DockerContext
 ```
 
+Shallow testing of the image
+
+```bash
+docker run jejuness:jj_build_knowledge_graph extract_graph.py --help
+```
+
 Run the extraction (adjust paths and `.env` as needed):
 
 ```bash
@@ -76,7 +82,7 @@ docker run --rm \
   -v `pwd`:/credentials \
   --env-file /credentials/.env \
   jejuness:jj_build_knowledge_graph \
-  python extracting_graph.py --input_directory /data --load_markdown_document file.md
+  extracting_graph.py --input_directory /data --load_markdown_document file.md
 ```
 
 ## Further advanced document "chunkings"
