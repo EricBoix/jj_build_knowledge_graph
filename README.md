@@ -1,6 +1,7 @@
 # Hands on lowbrow exploration of GraphRAG in Python<!-- omit in toc -->
 
 - [Introduction](#introduction)
+- [Docker](#docker)
 - [Running things: the simple extraction use case](#running-things-the-simple-extraction-use-case)
   - [Notes](#notes)
 - [Further advanced document "chunkings"](#further-advanced-document-chunkings)
@@ -65,6 +66,24 @@ The original associated code, from which this work is partly derived, is availab
     ```
 
 - when ran on `2017_-_Culadasa_John_Yates-Matthew_Immergut-Jeremy_Graves_-_The_Mind_Illuminated_-_llamaparse_raw_conversion.md` this script will trigger **~5800 llm calls**.
+
+## Running with Docker
+
+Build the image from the repository root:
+
+```bash
+docker build -f DockerContext/Dockerfile -t jj_build_knowledge_graph .
+```
+
+Run the extraction (adjust paths and `.env` as needed):
+
+```bash
+docker run --rm \
+  --env-file .env \
+  -v /path/to/data:/data \
+  jj_build_knowledge_graph \
+  python extracting_graph.py --input_directory /data --load_markdown_document file.md
+```
 
 ## Further advanced document "chunkings"
 
