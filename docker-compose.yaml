@@ -1,6 +1,6 @@
 services:
   neo4j:
-    build: ./neo4j
+    build: https://github.com/EricBoix/jj_neo4j_docker.git
     ports:
       - "7474:7474"
       - "7687:7687"
