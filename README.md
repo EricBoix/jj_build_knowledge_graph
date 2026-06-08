@@ -7,7 +7,6 @@
 - [Visually explore the resulting knowledge graph (with neo4j web UI)](#visually-explore-the-resulting-knowledge-graph-with-neo4j-web-ui)
 - [Use the knowledge graph programmatically](#use-the-knowledge-graph-programmatically)
 - [Dump/Restore the database content for later usage](#dumprestore-the-database-content-for-later-usage)
-- [Scripting things](#scripting-things)
 - [References](#references)
 - [Next steps](#next-steps)
 
@@ -71,7 +70,7 @@ docker build -t jejuness:jj_build_knowledge_graph https://github.com/EricBoix/jj
 Shallow testing of the image
 
 ```bash
-docker run jejuness:jj_build_knowledge_graph extract_graph.py --help
+docker run jejuness:jj_build_knowledge_graph extracting_graph.py --help
 ```
 
 Run the extraction (adjust paths and `.env` as needed):
@@ -176,25 +175,6 @@ docker run --interactive --tty --rm \
     --volume=`pwd`/backups:/backups \
     neo4j/neo4j-admin neo4j-admin database load neo4j --from-path=/backups
 docker compose up --detach
-```
-
-## Scripting things
-
-In order to reproduce resulting data production (cut and paste based)
-
-### Collecting Gold Dust
-
-FIXME THIS IS REDUNDANT WITH collecting_gold_dust readme.md CLEAN ME
-
-```bash
-source ven/bin/activate
-docker compose up --detach
-python extracting_graph_semantic_chuncker.py --input_directory ../../../Data/ISBN_978-0-9835844-5-2_-_Collecting_Gold_Dust/ --load_markdown_document result_data/2019_-_Sayadaw-U-Tejaniya-Collecting-Gold-Dust-Web-Book-1_-_local_converter.md --load_json_document Convert/SelfMadePython/Sentences_as_LangChain_Document.json > extract.log 2>&1 &
-tail -f extract.log
-...
-docker compose down
-docker run --interactive --tty --rm  --volume=`pwd`/data:/data --volume=`pwd`/backups:/backups neo4j/neo4j-admin neo4j-admin database dump neo4j --to-path=/backups
-mv backups/neo4j.dump backups/neo4j.CollectingGoldDust.MarkdownTextSplitterAndSentences.dump
 ```
 
 ## References
