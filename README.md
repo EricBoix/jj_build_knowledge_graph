@@ -212,7 +212,8 @@ For the time being, tracing LLM calls (which is the minimum required for observa
 `langchain_ollama` package with
 
 ```bash
-patch -uNp1 python3.10/site-packages/langchain_ollama/chat_models.py langchain_ollama_chat_models.patch
+cd venv/lib
+patch -uNp1 python3.10/site-packages/langchain_ollama/chat_models.py ../../langchain_ollama_chat_models.patch
 ```
 
 Note (in case the patch gets irrelevant because the `langchain_ollama` package is not pinned):
