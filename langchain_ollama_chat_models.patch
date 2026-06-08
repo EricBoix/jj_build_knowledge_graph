@@ -1,0 +1,10 @@
+--- python3.10/site-packages/langchain_ollama/chat_models.py.orig	2026-06-08 12:44:39
++++ python3.10/site-packages/langchain_ollama/chat_models.py	2026-06-08 12:46:06
+@@ -1110,6 +1110,7 @@
+         stop: list[str] | None = None,
+         **kwargs: Any,
+     ) -> Iterator[Mapping[str, Any] | str]:
++        print(" (chat client call) ", end='', flush=True)  # jj_build_knowledge_graph: added line
+         if not self._client:
+             msg = (
+                 "Ollama sync client is not initialized. "

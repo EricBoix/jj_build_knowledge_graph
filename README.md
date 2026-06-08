@@ -184,6 +184,8 @@ In order to reproduce resulting data production (cut and paste based)
 
 ### Collecting Gold Dust
 
+FIXME THIS IS REDUNDANT WITH collecting_gold_dust readme.md CLEAN ME
+
 ```bash
 source ven/bin/activate
 docker compose up --detach
@@ -207,11 +209,18 @@ mv backups/neo4j.dump backups/neo4j.CollectingGoldDust.MarkdownTextSplitterAndSe
 ### Improve observability
 
 For the time being, tracing LLM calls (which is the minimum required for observability) is done by patching
-`venv/lib/python3.10/site-packages/langchain_ollama/chat_models.py` and adding the following line as first line of the _create_chat_stream member function:
+`langchain_ollama` package with
 
-```python
-print(" (chat client call) ", end='', flush=True)  # EBO was here: added
+```bash
+patch -uNp1 python3.10/site-packages/langchain_ollama/chat_models.py langchain_ollama_chat_models.patch
 ```
+
+Note (in case the patch gets irrelevant because the `langchain_ollama` package is not pinned):
+> this patch simply adds the following line as first line of the `_create_chat_stream` member function (within the `venv/lib/python3.10/site-packages/langchain_ollama/chat_models.py` file):
+>
+>```python
+>print(" (chat client call) ", end='', flush=True)  # EBO was here: added
+>```
 
 Instead, (and because [LangSmith (IBM docs)](https://www.ibm.com/think/topics/langsmith) is [expensive](https://www.metacto.com/blogs/the-true-cost-of-langsmith-a-comprehensive-pricing-integration-guide)), a cleaner way consists in
 
