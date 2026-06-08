@@ -78,8 +78,7 @@ Run the extraction (adjust paths and `.env` as needed):
 ```bash
 docker run --rm \
   -v /path/to/data:/data \
-  -v `pwd`:/credentials \
-  --env-file /credentials/.env \
+  --env-file .env \
   jejuness:jj_build_knowledge_graph \
   extracting_graph.py --input_directory /data --load_markdown_document file.md
 ```
