@@ -10,3 +10,4 @@ networkx
 python-dotenv
 unstructured
 markdown
+traceloop-sdk

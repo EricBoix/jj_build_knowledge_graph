@@ -9,3 +9,9 @@ MODEL_URL=https://your_favorite_server_CHANGE_ME/ollama/
 API_KEY=sk-CHANGE_ME
 # LLM name as known by the llama platform:
 MODEL=llama3:70b_CHANGE_ME
+
+### LLM Observability (Traceloop SDK → Grafana otel-lgtm)
+# Base URL of the OTLP HTTP receiver served by Observability/docker-compose.yml 
+# (the port value must match the value configured value). Note: this 
+# self-managed backend requires no API key.
+TRACELOOP_BASE_URL=http://localhost:4318

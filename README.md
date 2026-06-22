@@ -1,5 +1,7 @@
 # Hands on lowbrow exploration of GraphRAG in Python<!-- omit in toc -->
 
+## Table of contents<!-- omit in toc -->
+
 - [Introduction](#introduction)
 - [Running things: the simple extraction use case](#running-things-the-simple-extraction-use-case)
 - [Running with Docker](#running-with-docker)
@@ -172,6 +174,10 @@ python vector_and_graph_hybrid_search.py
 
 Again, refer to [jj_workflow_shell configuration stage](https://github.com/EricBoix/jj_worflow_shell.git/Readme.md) in order to configure and use the `dump_database` and `restore_database` shell utilities/methods.
 
+### LLM (calls) observability
+
+Refer to [`Observability/README.md`](Observability/README.md) for installation, backend launch, and a guided analysis walkthrough of LLM observability.
+
 ## References
 
 - [GraphRAG: The Marriage of Knowledge Graphs and RAG: Emil Eifrem](https://www.youtube.com/watch?v=knDDGYHnnSI)
@@ -180,28 +186,6 @@ Again, refer to [jj_workflow_shell configuration stage](https://github.com/EricB
 - Calling [LLM through OpenwebUI examples](https://github.com/UDL-LIRIS/python-openwebui-bootstraping-examples)
 
 ## Next steps
-
-### Improve observability
-
-For the time being, tracing LLM calls (which is the minimum required for observability) is done by patching
-`langchain_ollama` package with
-
-```bash
-cd venv/lib
-patch -uNp1 python3.10/site-packages/langchain_ollama/chat_models.py ../../langchain_ollama_chat_models.patch
-```
-
-Note (in case the patch gets irrelevant because the `langchain_ollama` package is not pinned):
-> this patch simply adds the following line as first line of the `_create_chat_stream` member function (within the `venv/lib/python3.10/site-packages/langchain_ollama/chat_models.py` file):
->
->```python
->print(" (chat client call) ", end='', flush=True)  # EBO was here: added
->```
-
-Instead, (and because [LangSmith (IBM docs)](https://www.ibm.com/think/topics/langsmith) is [expensive](https://www.metacto.com/blogs/the-true-cost-of-langsmith-a-comprehensive-pricing-integration-guide)), a cleaner way consists in
-
-- using [OpenLLMetry](https://github.com/traceloop/openllmetry)
-- deploying a [docker based OpenTelemetry backend](https://opentelemetry.io/docs/demo/docker-deployment/)
 
 ### Improve graph extraction: define and use ontologies
 

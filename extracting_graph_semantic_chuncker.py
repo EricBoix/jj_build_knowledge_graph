@@ -112,4 +112,13 @@ def main():
 
 
 if __name__ == "__main__":
+    from dotenv import load_dotenv
+    from traceloop.sdk import Traceloop
+
+    load_dotenv()
+    Traceloop.init(
+        disable_batch=True,
+        app_name="jj-build-knowledge-graph",
+        api_endpoint=os.environ.get("TRACELOOP_BASE_URL", "http://localhost:4318"),
+    )
     main()
