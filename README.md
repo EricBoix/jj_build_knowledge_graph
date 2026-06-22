@@ -17,29 +17,43 @@ The original associated code, from which this work is partly derived, is availab
 
 ## Running things: the simple extraction use case
 
-1. Launch a Neo4j database (to collect the extracted graph)
+### Configure and start a Neo4j database (to collect the extracted graph)
 
-    ```bash
-    # Prepare the virtual environment
-    python3.10 -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-    # Launch the Neo4j database
-    docker compose up --detach
-    ```
+Refer to [jj_workflow_shell configuration stage](https://github.com/EricBoix/jj_worflow_shell.git/Readme.md) in order to configure the shell utilities/methods.
 
-1. Transmit to the extracting python code the required configuration elements (neo4j database and llm server accesses) by
-   - copying the [`env-reference` file](./env-reference) to a `.env` file
-   - customize the resulting  `.env` file by configuring (at least) the entries mentioning the `CHANGE_ME` string.
+TLDR;
 
-1. Realize the graph extraction
+```bash
+cd `git rev-parse --show-toplevel`         # Implicit from now on
+git clone https://github.com/EricBoix/jj_worflow_shell.git
+cp env-reference .env
+# Edit and configure resulting .env file
+export RESULTS_DIR=`pwd`/result_data       # Syntactic sugar
+\rm -fr $RESULTS_DIR/database
+```
 
-    ```bash
-    # Extract the graph and store it in database
-    python extracting_graph.py \
-    --input_directory ../../../Data/ISBN_978-1-5011-5698-4_-_The_Mind_Illuminated/result_data/ \
-    --load_markdown_document 2017_-_Culadasa_John_Yates-Matthew_Immergut-Jeremy_Graves_-_The_Mind_Illuminated_-_llamaparse_manually_fixed.md
-    ```
+```bash
+source jj_worflow_shell/Neo4jDatabase.sh    # Implicit from now on
+launch_neo4j_db $RESULTS_DIR $NEO4J_PORT $NEO4J_USERNAME/$NEO4J_PASSWORD
+```
+
+### Realize the graph extraction
+
+```bash
+# Prepare the virtual environment
+python3.10 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+```bash
+# Retrieve some input data e.g.
+git clone https://github.com/EricBoix/jj_doc_Four_Noble_Truths.git jj_doc_Four_Noble_Truths.git
+# Extract the graph and store it in database
+python extracting_graph.py \
+--input_directory jj_doc_Four_Noble_Truths.git/original_data/ \
+--load_markdown_document 250_BCE_-_Dhammacakkappavattana_Sutta_Four_Noble_Truths_Wikipedia_translation.md
+```
 
 ### Notes
 
@@ -112,10 +126,13 @@ $:server connect
 # Make sure you are connect to the right database (again this has to match 
 # with what was configured in you .env file)
 $:use neo4j
-# Displays the full extracted graph with all its nodes. Caveat emptor: 
+# Display all the nodes of the full extracted graph. Caveat emptor: 
 # within the UI settings, the "Initial node display" integer parameter 
 # controls the number of nodes displayed which defaults to 300
 neo4j$ MATCH (n) RETURN n
+# Display all nodes AND edges
+neo4j$ MATCH (n) MATCH ()-[r]->() RETURN n, r
+
 # Display the nodes with the "Person" label
 neo4j$ MATCH (n) WHERE n:Person RETURN n
 # Display the nodes NOT having the "Person" label
@@ -153,28 +170,7 @@ python vector_and_graph_hybrid_search.py
 
 ## Dump/Restore the database content for later usage
 
-The following is a direct application of the [dump and load neo4j examples](https://neo4j.com/docs/operations-manual/current/docker/dump-load/)
-
-```bash
-docker compose down     # Database dump requires being "offline"
-docker run --interactive --tty --rm  \
-           --volume=`pwd`/data:/data \       # Has to match docker-compose.yaml
-           --volume=`pwd`/backups:/backups \ # Sub-directory where dumps end up
-           neo4j/neo4j-admin neo4j-admin database dump neo4j --to-path=/backups
-```
-
-and check the `backups/` sub-directory for the new existence of `neo4j.dump` file.
-
-Restoring a previously dumped database is done with the following command
-
-```bash
-rm -fr data     # WARNING: this deletes all your databases !
-docker run --interactive --tty --rm \
-    --volume=`pwd`/data:/data \
-    --volume=`pwd`/backups:/backups \
-    neo4j/neo4j-admin neo4j-admin database load neo4j --from-path=/backups
-docker compose up --detach
-```
+Again, refer to [jj_workflow_shell configuration stage](https://github.com/EricBoix/jj_worflow_shell.git/Readme.md) in order to configure and use the `dump_database` and `restore_database` shell utilities/methods.
 
 ## References
 
@@ -207,9 +203,35 @@ Instead, (and because [LangSmith (IBM docs)](https://www.ibm.com/think/topics/la
 - using [OpenLLMetry](https://github.com/traceloop/openllmetry)
 - deploying a [docker based OpenTelemetry backend](https://opentelemetry.io/docs/demo/docker-deployment/)
 
-### Improve the (graph) extraction process
+### Improve graph extraction: define and use ontologies
 
-[Read this and improve the script](https://neo4j.com/blog/developer/knowledge-graph-extraction-challenges/)
+- Refer to this inadequate yet inspiring, [OWL Ontology of Consciousness](https://www.researchgate.net/publication/383227961_An_OWL_Ontology_of_Consciousness)
+- [Knowledge graphs organizing principles tutorial](https://medium.com/@michelleloh.tech/day-15-learn-knowledge-graphs-part-2-organizing-principles-17c76eb3686b)
+
+### Improve graph extraction: more stuff to try
+
+- [Read this and improve the script](https://neo4j.com/blog/developer/knowledge-graph-extraction-challenges/)
+
+### Improve graph extraction: explore alternative chuncking
+
+[RAG chunking strategies article](https://dev.to/sreeni5018/rag-chunking-strategies-4i3a) mentions 6 strategies
+
+- Fixed-Size chunking (LangChains's `CharacterTextSplitter`)
+- Recursive character chunking (LangChains's `RecursiveCharacterTextSplitter`)
+- Semantic chunking
+- Document structure-aware chunking (e.g. LangChain's `MarkdownHeaderTextSplitter`)
+- Hierarchical (parent/child) chunking: can be naturally combined with/deduced from document-structure-aware chunking
+- LLM-based (and agentic chunking)
+
+The [`ToolTesting/GraphRAG/extracting_graph.py` code](./Doc/ToolTesting/GraphRAG/extracting_graph.py#32) currently uses [LangChain's `RecursiveCharacterTextSplitter`](https://reference.langchain.com/python/langchain-text-splitters/character/RecursiveCharacterTextSplitter) as "chunker". But knowledge graph focuses on semantics and using a semantic based chunker can only improve things (although it comes at a cost) at two levels : retrieval and citation. Since the [`ConvertPdfToMarkdown` package] produces sentence (and/or paragraph, sub-section...) based outputs we have the natural opportunity to use the available semantic chunkers starting with [lanchain_exprimental's  `SemanticChunker`](https://github.com/langchain-ai/langchain-experimental/blob/main/libs/experimental/langchain_experimental/text_splitter.py#L99).
+
+References:
+
+- [`SemanticChunker` class](https://github.com/langchain-ai/langchain-experimental/blob/main/libs/experimental/langchain_experimental/text_splitter.py#L99) as offered by [lanchain_exprimental (python package)](https://github.com/langchain-ai/langchain-experimental/tree/main)
+- [langchain_experimental "SemanticChunker" tutorial](https://colab.research.google.com/github/LangChain-OpenTutorial/LangChain-OpenTutorial/blob/main/07-TextSplitter/04-SemanticChunker.ipynb#scrollTo=312e3aae)
+- ["A Visual Exploration of Semantic Text Chunking" article](https://towardsdatascience.com/a-visual-exploration-of-semantic-text-chunking-6bb46f728e30/):
+  - :warning: This article mentions that it is key to "use a model that has been trained to generate meaningful embeddings" and forwards to [`SentenceTransformers` library](https://sbert.net/)
+- [Langchain's tutorial: Build a semantic search engine with LangChain](https://docs.langchain.com/oss/python/langchain/knowledge-base)
 
 ### Ingesting a Markdown file
 
