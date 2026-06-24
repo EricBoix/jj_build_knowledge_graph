@@ -21,13 +21,13 @@ The original associated code, from which this work is partly derived, is availab
 
 ### Configure and start a Neo4j database (to collect the extracted graph)
 
-Refer to [jj_workflow_shell configuration stage](https://github.com/EricBoix/jj_worflow_shell.git/Readme.md) in order to configure the shell utilities/methods.
+Refer to [jj_workflow_shell configuration stage](https://github.com/EricBoix/jj_workflow_shell.git/Readme.md) in order to configure the shell utilities/methods.
 
 TLDR;
 
 ```bash
 cd `git rev-parse --show-toplevel`         # Implicit from now on
-git clone https://github.com/EricBoix/jj_worflow_shell.git
+git clone https://github.com/EricBoix/jj_workflow_shell.git
 cp env-reference .env
 # Edit and configure resulting .env file
 export RESULTS_DIR=`pwd`/result_data       # Syntactic sugar
@@ -35,7 +35,7 @@ export RESULTS_DIR=`pwd`/result_data       # Syntactic sugar
 ```
 
 ```bash
-source jj_worflow_shell/Neo4jDatabase.sh    # Implicit from now on
+source jj_workflow_shell/Neo4jDatabase.sh    # Implicit from now on
 launch_neo4j_db $RESULTS_DIR $NEO4J_PORT $NEO4J_USERNAME/$NEO4J_PASSWORD
 ```
 
@@ -172,7 +172,7 @@ python vector_and_graph_hybrid_search.py
 
 ## Dump/Restore the database content for later usage
 
-Again, refer to [jj_workflow_shell configuration stage](https://github.com/EricBoix/jj_worflow_shell.git/Readme.md) in order to configure and use the `dump_database` and `restore_database` shell utilities/methods.
+Again, refer to [jj_workflow_shell configuration stage](https://github.com/EricBoix/jj_workflow_shell.git/Readme.md) in order to configure and use the `dump_database` and `restore_database` shell utilities/methods.
 
 ### LLM (calls) observability
 
