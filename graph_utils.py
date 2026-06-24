@@ -14,15 +14,15 @@ DEBUG_PROMPT = "   "
 
 def initialize_llm():
     load_dotenv()
-    MODEL = os.environ["MODEL"]
-    MODEL_URL = os.environ["MODEL_URL"]
-    headers = {"Authorization": f'Bearer {os.environ["API_KEY"]}'}
+    LLM_MODEL_NAME = os.environ["LLM_MODEL_NAME"]
+    LLM_MODEL_URL = os.environ["LLM_MODEL_URL"]
+    headers = {"Authorization": f'Bearer {os.environ["LLM_API_KEY"]}'}
 
     llm = ChatOllama(
         # Note: the following base_url will be auto-magically extended with
         # a trailing "/api/chat"
-        base_url=MODEL_URL,
-        model=MODEL,
+        base_url=LLM_MODEL_URL,
+        model=LLM_MODEL_NAME,
         # How to pass authentication to OpenWebUI, refer to
         # - https://github.com/langchain-ai/langchain/issues/25055
         # - https://medium.com/learnwithrahul/running-ollama-remotely-in-a-secure-way-d14ba13c8d77
@@ -38,7 +38,7 @@ def initialize_llm():
         response = llm.invoke('Reply with exactly: {"status": "ok"}')
         print(DEBUG_PROMPT + f" {response.content}")
     except Exception as e:
-        print(f"\nFailed to connect to LLM at {MODEL_URL}.")
+        print(f"\nFailed to connect to LLM at {LLM_MODEL_URL}.")
         print(f"Error: {e}")
         sys.exit(1)
 

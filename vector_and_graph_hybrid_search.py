@@ -19,9 +19,9 @@ if __name__ == "__main__":
     graph = Neo4jGraph(
         username=os.environ["NEO4J_USERNAME"], password=os.environ["NEO4J_PASSWORD"]
     )
-    MODEL = os.environ["MODEL"]
-    MODEL_URL = os.environ["MODEL_URL"]
-    HEADERS = {"Authorization": f'Bearer {os.environ["API_KEY"]}'}
+    LLM_MODEL_NAME = os.environ["LLM_MODEL_NAME"]
+    LLM_MODEL_URL = os.environ["LLM_MODEL_URL"]
+    HEADERS = {"Authorization": f'Bearer {os.environ["LLM_API_KEY"]}'}
 
     ############################# Then, consider a user given main question,
     # given in Natural Language, and
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     ##### First, build a vector retriever that will search the embedding space
     # for vectors that are close enough to the question
     embeddings = OllamaEmbeddings(
-        base_url=MODEL_URL,
+        base_url=LLM_MODEL_URL,
         model="mxbai-embed-large:latest",
         client_kwargs={"headers": HEADERS},
     )
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     # recommendable practice.
     def full_retriever(question: str):
         concerned_entities = extract_entities_from_question(
-            MODEL, MODEL_URL, HEADERS, question
+            LLM_MODEL_NAME, LLM_MODEL_URL, HEADERS, question
         )
         graph_data = graph_retriever(graph, concerned_entities)
         vector_data = [el.page_content for el in vector_retriever.invoke(question)]
@@ -92,8 +92,8 @@ if __name__ == "__main__":
     llm = ChatOllama(
         # Note: the following base_url will be auto-magically extended with
         # a trailing "/api/chat"
-        base_url=MODEL_URL,
-        model=MODEL,
+        base_url=LLM_MODEL_URL,
+        model=LLM_MODEL_NAME,
         # How to pass authentication to OpenWebUI, refer to
         # - https://github.com/langchain-ai/langchain/issues/25055
         # - https://medium.com/learnwithrahul/running-ollama-remotely-in-a-secure-way-d14ba13c8d77

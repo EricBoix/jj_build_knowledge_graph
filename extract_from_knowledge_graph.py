@@ -73,9 +73,9 @@ if __name__ == "__main__":
     graph = Neo4jGraph(
         username=os.environ["NEO4J_USERNAME"], password=os.environ["NEO4J_PASSWORD"]
     )
-    MODEL = os.environ["MODEL"]
-    MODEL_URL = os.environ["MODEL_URL"]
-    HEADERS = {"Authorization": f'Bearer {os.environ["API_KEY"]}'}
+    LLM_MODEL_NAME = os.environ["LLM_MODEL_NAME"]
+    LLM_MODEL_URL = os.environ["LLM_MODEL_URL"]
+    HEADERS = {"Authorization": f'Bearer {os.environ["LLM_API_KEY"]}'}
 
     ######################### Then, consider a user given question given in
     # Natural Language and extract (by using NLP with the considered llm) from
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # reduced to [ "Nonna Lucia" ].
     question = "Who is Nonna Lucia?"
     concerned_entities = extract_entities_from_question(
-        MODEL, MODEL_URL, HEADERS, question
+        LLM_MODEL_NAME, LLM_MODEL_URL, HEADERS, question
     )
     print(
         DEBUG_PROMPT + " Look within the graph for info concerning : ",
