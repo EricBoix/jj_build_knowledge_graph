@@ -16,6 +16,7 @@ def initialize_llm():
     load_dotenv()
     LLM_MODEL_NAME = os.environ["LLM_MODEL_NAME"]
     LLM_MODEL_URL = os.environ["LLM_MODEL_URL"]
+    LLM_API_KEY = os.environ["LLM_API_KEY"]
     headers = {"Authorization": f'Bearer {os.environ["LLM_API_KEY"]}'}
 
     llm = ChatOllama(
@@ -38,7 +39,9 @@ def initialize_llm():
         response = llm.invoke('Reply with exactly: {"status": "ok"}')
         print(DEBUG_PROMPT + f" {response.content}")
     except Exception as e:
-        print(f"\nFailed to connect to LLM at {LLM_MODEL_URL}.")
+        print(f"\nFailed to connect to LLM at {LLM_MODEL_URL}")
+        print(f"\nwith model {LLM_MODEL_NAME}")
+        print(f"\nand with API-key {LLM_API_KEY}")
         print(f"Error: {e}")
         sys.exit(1)
 
