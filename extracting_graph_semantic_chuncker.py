@@ -3,10 +3,12 @@
 # RecursiveCharacterTextSplitter algorithm.
 # Note: this code is derived from
 #   https://github.com/Coding-Crashkurse/GraphRAG-with-Llama-3.1.git
-import argparse
 import json
 import os
 import sys
+import argparse
+import dotenv
+from traceloop.sdk import Traceloop
 
 from langchain_text_splitters import MarkdownTextSplitter
 from langchain_core.documents import Document
@@ -41,6 +43,12 @@ def parse_arguments():
         type=str,
         metavar="MARKDOWN_FILE",
         help="Load documents from a markdown file.",
+    )
+    parser.add_argument(
+        "--use_llm_telemetry_server",
+        type=str,
+        metavar="TELEMETRY_SERVER_URL",
+        help="When llm telemetry is required, URL of the OpenTelemetry server.",
     )
     args = parser.parse_args()
 
@@ -104,7 +112,14 @@ def load_documents(args):
 
 
 def main():
+    dotenv.load_dotenv()
     args = parse_arguments()
+    if args.use_llm_telemetry_server:
+        Traceloop.init(
+            disable_batch=True,
+            app_name="jj-build-knowledge-graph",
+            api_endpoint=os.environ.get("TRACELOOP_BASE_URL", "http://localhost:4318"),
+        )
     documents = load_documents(args)
     llm = initialize_llm()
     graph_documents = extract_graph(llm, documents)
@@ -112,13 +127,4 @@ def main():
 
 
 if __name__ == "__main__":
-    from dotenv import load_dotenv
-    from traceloop.sdk import Traceloop
-
-    load_dotenv()
-    Traceloop.init(
-        disable_batch=True,
-        app_name="jj-build-knowledge-graph",
-        api_endpoint=os.environ.get("TRACELOOP_BASE_URL", "http://localhost:4318"),
-    )
     main()
