@@ -46,9 +46,9 @@ def parse_arguments():
     )
     parser.add_argument(
         "--use_llm_telemetry_server",
-        type=str,
-        metavar="TELEMETRY_SERVER_URL",
-        help="When llm telemetry is required, URL of the OpenTelemetry server.",
+        type=bool,
+        metavar="BOOL",
+        help="Whether to use an llm OpenTelemetry server or not.",
     )
     args = parser.parse_args()
 

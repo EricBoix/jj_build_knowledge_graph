@@ -64,6 +64,7 @@ Set the TRACELOOP_BASE_URL OTLP endpoint in `.env`) and run the extraction as us
 ```bash
 python extracting_graph_semantic_chuncker.py \
   --load_markdown_document path/to/your/document.md
+  --use_llm_telemetry_server
 ```
 
 Traceloop initialises automatically (see the `if __name__ == "__main__"` block in the script)

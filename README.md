@@ -9,6 +9,7 @@
 - [Visually explore the resulting knowledge graph (with neo4j web UI)](#visually-explore-the-resulting-knowledge-graph-with-neo4j-web-ui)
 - [Use the knowledge graph programmatically](#use-the-knowledge-graph-programmatically)
 - [Dump/Restore the database content for later usage](#dumprestore-the-database-content-for-later-usage)
+- [LLM (calls) observability](#llm-calls-observability)
 - [References](#references)
 - [Next steps](#next-steps)
 
@@ -72,8 +73,6 @@ python extracting_graph.py \
     docker run --interactive --tty --rm --volume=`pwd`/data:/data neo4j /usr/bin/rm -fr /data/*
     rmdir ./data
     ```
-
-- when ran on `2017_-_Culadasa_John_Yates-Matthew_Immergut-Jeremy_Graves_-_The_Mind_Illuminated_-_llamaparse_raw_conversion.md` this script will trigger **~5800 llm calls**.
 
 ## Running with Docker
 
@@ -174,9 +173,17 @@ python vector_and_graph_hybrid_search.py
 
 Again, refer to [jj_workflow_shell configuration stage](https://github.com/EricBoix/jj_workflow_shell.git/Readme.md) in order to configure and use the `dump_database` and `restore_database` shell utilities/methods.
 
-### LLM (calls) observability
+## LLM (calls) observability
 
 Refer to [`Observability/README.md`](Observability/README.md) for installation, backend launch, and a guided analysis walkthrough of LLM observability.
+
+Here are a few numerical results. The markdown and sentences columns indicate the number of [LangChain documents](https://reference.langchain.com/python/langchain-core/documents) that where respectively sent to the llm for interpretation (extracting nodes and edges).
+
+| Book | Markdown (Chuncker) | Sentences | # llm calls |
+| ---- | -------- | --------- | ----------- |
+| [Four Noble Truths](https://github.com/EricBoix/jj_doc_Four_Noble_Truths) | FIXME | FIXME | FIXME |
+| [Collecting Gold Dust](https://github.com/EricBoix/jj_doc_Collecting_Gold_Dust) | FIXME | FIXME | FIXME |
+| [Zen flesh, zen bones](https://github.com/EricBoix/jj_doc_Zen_Flesh_Zen_Bones) | 45 (UnstructuredMarkdownLoader) | 2479 | 2524 |
 
 ## References
 
@@ -196,14 +203,16 @@ Refer to [`Observability/README.md`](Observability/README.md) for installation, 
 
 - [Read this and improve the script](https://neo4j.com/blog/developer/knowledge-graph-extraction-challenges/)
 
-### Improve graph extraction: explore alternative chuncking
+### Improve graph extraction: explore alternative chunckings
 
-[RAG chunking strategies article](https://dev.to/sreeni5018/rag-chunking-strategies-4i3a) mentions 6 strategies
+[RAG chunking strategies article](https://dev.to/sreeni5018/rag-chunking-strategies-4i3a) mentions 6 strategies (checked box indicate strategies used/explored with this code)
 
 - Fixed-Size chunking (LangChains's `CharacterTextSplitter`)
 - Recursive character chunking (LangChains's `RecursiveCharacterTextSplitter`)
 - Semantic chunking
-- Document structure-aware chunking (e.g. LangChain's `MarkdownHeaderTextSplitter`)
+- Document structure-aware chunking for example
+  - [x] Markdown aware chunking (e.g. LangChain's `MarkdownHeaderTextSplitter`)
+  - [x] Grammar aware chunking: use paragraph and sentence structure.
 - Hierarchical (parent/child) chunking: can be naturally combined with/deduced from document-structure-aware chunking
 - LLM-based (and agentic chunking)
 
