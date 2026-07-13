@@ -1,5 +1,18 @@
 {
-    "cSpell.words": [
-        "dotenv"
-    ]
+    "cSpell.customDictionaries": {
+        "Build-knowledge-graph-words": {
+            "name": "Build_knowledge_graph",
+            "path": "${workspaceRoot}/Build_knowledge_graph-words.txt",
+            "description": "Words used the build knowledge graph algorithm",
+            "addWords": true
+        },
+        "Build_knowledge_graph": true
+    },
+    "[markdown]": {
+        "editor.wordWrap": "bounded",
+        "editor.wordWrapColumn": 80
+    },
+    "files.associations": {
+		"env-reference": "plaintext"
+	}
 }

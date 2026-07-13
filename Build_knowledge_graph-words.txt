@@ -1,0 +1,20 @@
+# Personal names
+Dhammacakkappavattana
+Eifrem
+Sayadaw
+Tejaniya
+# Technical
+agentic
+chuncker
+Chunker
+chunckers
+chunckings
+Gazit
+grafana
+langchain
+Openweb
+ollama
+promql
+toplevel
+youtube
+venv

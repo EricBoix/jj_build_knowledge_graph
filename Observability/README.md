@@ -8,7 +8,7 @@
 - [Configuring and running the instrumented script](#configuring-and-running-the-instrumented-script)
 - [Trivial analysis walkthrough](#trivial-analysis-walkthrough)
 - [References](#references)
-- [Quick and dirty "logs": patch langchain\_ollama](#quick-and-dirty-logs-patch-langchain_ollama)
+- [Quick and dirty "logs": patch `langchain_ollama`](#quick-and-dirty-logs-patch-langchain_ollama)
 
 ## Introduction
 
@@ -17,7 +17,7 @@ using two fully free and open-source components:
 
 - **Instrumentation: [Traceloop OpenLLMetry](https://github.com/traceloop/openllmetry)** a Python SDK that auto-instruments LangChain (and Ollama) calls and emits OpenTelemetry traces.
 - **Backend: [grafana/otel-lgtm](https://github.com/grafana/docker-otel-lgtm)**  a single [Docker image](https://hub.docker.com/r/grafana/otel-lgtm) bundling (among others)
-  - an [OTLP]() HTTP receiver: server for trace ingestion
+  - an [OTLP](https://github.com/open-telemetry) HTTP receiver: server for trace ingestion
   - Grafana: a web UI integrating tools
     - Tempo for trace analysis
     - Prometheus for metrics (on spans).
@@ -44,8 +44,8 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/health
 # expected: 200
 ```
 
-| Service | URL | Usage  |
-|---------|-----|---------------------|
+| Service | URL | Usage |
+| ------- | --- | ------------------- |
 | Grafana UI | <http://localhost:3000> (Default credentials: admin / admin) | UI tool integration |
 | Prometheus | <http://localhost:9090> | Metrics |
 | OTLP HTTP receiver | <http://localhost:4318> | Ingestion |
@@ -64,7 +64,7 @@ Set the TRACELOOP_BASE_URL OTLP endpoint in `.env`) and run the extraction as us
 ```bash
 python extracting_graph_semantic_chuncker.py \
   --load_markdown_document path/to/your/document.md
-  --use_llm_telemetry_server
+  --use_llm_telemetry_server true
 ```
 
 Traceloop initialises automatically (see the `if __name__ == "__main__"` block in the script)
@@ -89,7 +89,7 @@ Navigate to <http://localhost:3000> and log in with `admin` / `admin`.
 Click any trace row to open the flame graph. Key spans to look for:
 
 | Span name | What it measures |
-|-----------|-----------------|
+| --------- | --------------- |
 | `langchain.ChatOllama` | End-to-end LLM call duration |
 | `langchain.LLMGraphTransformer` | Graph extraction time per document chunk |
 | `gen_ai.completion` | Token-level detail (prompt / completion tokens) |
@@ -120,7 +120,7 @@ Click any trace row to open the flame graph. Key spans to look for:
 
 [Getting started with OpenTelemetry for LLM observability](https://www.youtube.com/watch?v=HAvbWZqoV34) talk by [Nir Gazit (CEO/co-founder of @Traceloop)](https://www.traceloop.com/author/nir-gazit).
 
-## Quick and dirty "logs": patch langchain_ollama
+## Quick and dirty "logs": patch `langchain_ollama`
 
 Tracing LLM calls can be done by patching the `langchain_ollama` package:
 

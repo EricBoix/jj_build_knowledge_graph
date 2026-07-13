@@ -5,7 +5,7 @@
 - [Introduction](#introduction)
 - [Running things: the simple extraction use case](#running-things-the-simple-extraction-use-case)
 - [Running with Docker](#running-with-docker)
-- [Further advanced document "chunkings"](#further-advanced-document-chunkings)
+- [Further advanced document "chunckings"](#further-advanced-document-chunckings)
 - [Visually explore the resulting knowledge graph (with neo4j web UI)](#visually-explore-the-resulting-knowledge-graph-with-neo4j-web-ui)
 - [Use the knowledge graph programmatically](#use-the-knowledge-graph-programmatically)
 - [Dump/Restore the database content for later usage](#dumprestore-the-database-content-for-later-usage)
@@ -79,13 +79,13 @@ python extracting_graph.py \
 Build the image from the repository root:
 
 ```bash
-docker build -t jejuness:jj_build_knowledge_graph https://github.com/EricBoix/jj_build_knowledge_graph.git#:DockerContext
+docker build -t jejuneness:jj_build_knowledge_graph https://github.com/EricBoix/jj_build_knowledge_graph.git#:DockerContext
 ```
 
 Shallow testing of the image
 
 ```bash
-docker run jejuness:jj_build_knowledge_graph extracting_graph.py --help
+docker run jejuneness:jj_build_knowledge_graph extracting_graph.py --help
 ```
 
 Run the extraction (adjust paths and `.env` as needed):
@@ -94,11 +94,11 @@ Run the extraction (adjust paths and `.env` as needed):
 docker run --rm \
   -v /path/to/data:/data \
   --env-file .env \
-  jejuness:jj_build_knowledge_graph \
+  jejuneness:jj_build_knowledge_graph \
   extracting_graph.py --input_directory /data --load_markdown_document file.md
 ```
 
-## Further advanced document "chunkings"
+## Further advanced document "chunckings"
 
 If you wish to break down the original document in chunks that follow the sentence structure (as opposed to evenly sized chunks with some overlap) use the following script (that depends on the output of [Collecting Gold Dust conversion](https://github.com/EricBoix/jj_doc_Collecting_Gold_Dust/blob/main/Readme.md)) :
 
@@ -216,11 +216,11 @@ Here are a few numerical results. The markdown and sentences columns indicate th
 - Hierarchical (parent/child) chunking: can be naturally combined with/deduced from document-structure-aware chunking
 - LLM-based (and agentic chunking)
 
-The [`ToolTesting/GraphRAG/extracting_graph.py` code](./Doc/ToolTesting/GraphRAG/extracting_graph.py#32) currently uses [LangChain's `RecursiveCharacterTextSplitter`](https://reference.langchain.com/python/langchain-text-splitters/character/RecursiveCharacterTextSplitter) as "chunker". But knowledge graph focuses on semantics and using a semantic based chunker can only improve things (although it comes at a cost) at two levels : retrieval and citation. Since the [`ConvertPdfToMarkdown` package] produces sentence (and/or paragraph, sub-section...) based outputs we have the natural opportunity to use the available semantic chunkers starting with [lanchain_exprimental's  `SemanticChunker`](https://github.com/langchain-ai/langchain-experimental/blob/main/libs/experimental/langchain_experimental/text_splitter.py#L99).
+The [`ToolTesting/GraphRAG/extracting_graph.py` code](./Doc/ToolTesting/GraphRAG/extracting_graph.py#32) currently uses [LangChain's `RecursiveCharacterTextSplitter`](https://reference.langchain.com/python/langchain-text-splitters/character/RecursiveCharacterTextSplitter) as "chuncker". But knowledge graph focuses on semantics and using a semantic based chuncker can only improve things (although it comes at a cost) at two levels : retrieval and citation. Since the [`ConvertPdfToMarkdown` package] produces sentence (and/or paragraph, sub-section...) based outputs we have the natural opportunity to use the available semantic chunckers starting with [langchain_experimental's  `SemanticChunker`](https://github.com/langchain-ai/langchain-experimental/blob/main/libs/experimental/langchain_experimental/text_splitter.py#L99).
 
 References:
 
-- [`SemanticChunker` class](https://github.com/langchain-ai/langchain-experimental/blob/main/libs/experimental/langchain_experimental/text_splitter.py#L99) as offered by [lanchain_exprimental (python package)](https://github.com/langchain-ai/langchain-experimental/tree/main)
+- [`SemanticChunker` class](https://github.com/langchain-ai/langchain-experimental/blob/main/libs/experimental/langchain_experimental/text_splitter.py#L99) as offered by [langchain_experimental (python package)](https://github.com/langchain-ai/langchain-experimental/tree/main)
 - [langchain_experimental "SemanticChunker" tutorial](https://colab.research.google.com/github/LangChain-OpenTutorial/LangChain-OpenTutorial/blob/main/07-TextSplitter/04-SemanticChunker.ipynb#scrollTo=312e3aae)
 - ["A Visual Exploration of Semantic Text Chunking" article](https://towardsdatascience.com/a-visual-exploration-of-semantic-text-chunking-6bb46f728e30/):
   - :warning: This article mentions that it is key to "use a model that has been trained to generate meaningful embeddings" and forwards to [`SentenceTransformers` library](https://sbert.net/)
