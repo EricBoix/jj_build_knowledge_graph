@@ -39,7 +39,7 @@ Skipping langchain-community due to error while instrumenting: No module named '
 Then some [spans](https://langcrew.ai/concepts/trace/#problem-no-traces-are-uploaded-after-execution), as expected, but eventually the following **unresolved** error is encountered
 
 ```bash
- File "/Users/ericboix/UNSAVED/tmp/Perso/jj_build_knowledge_graph/venv/lib/python3.10/site-packages/pydantic/main.py", line 263, in __init__
+ File "[...]/jejune_extract_knowledge_graph/venv/lib/python3.10/site-packages/pydantic/main.py", line 263, in __init__
     validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
 pydantic_core._pydantic_core.ValidationError: 1 validation error for LLMSpanAttributes
 `gen_ai.request.response_format`

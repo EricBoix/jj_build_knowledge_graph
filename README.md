@@ -79,13 +79,13 @@ python extracting_graph.py \
 Build the image from the repository root:
 
 ```bash
-docker build -t jejuneness:jj_build_knowledge_graph https://github.com/EricBoix/jj_build_knowledge_graph.git#:DockerContext
+docker build -t jejuneness:extract_knowledge_graph https://github.com/EricBoix/jejune_extract_knowledge_graph.git#:DockerContext
 ```
 
 Shallow testing of the image
 
 ```bash
-docker run jejuneness:jj_build_knowledge_graph extracting_graph.py --help
+docker run jejuneness:extract_knowledge_graph extracting_graph.py --help
 ```
 
 Run the extraction (adjust paths and `.env` as needed):
@@ -94,7 +94,7 @@ Run the extraction (adjust paths and `.env` as needed):
 docker run --rm \
   -v /path/to/data:/data \
   --env-file .env \
-  jejuneness:jj_build_knowledge_graph \
+  jejuneness:extract_knowledge_graph \
   extracting_graph.py --input_directory /data --load_markdown_document file.md
 ```
 

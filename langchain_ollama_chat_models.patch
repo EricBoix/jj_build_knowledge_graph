@@ -4,7 +4,7 @@
          stop: list[str] | None = None,
          **kwargs: Any,
      ) -> Iterator[Mapping[str, Any] | str]:
-+        print(" (chat client call) ", end='', flush=True)  # jj_build_knowledge_graph: added line
++        print(" (chat client call) ", end='', flush=True)  # jejune_extract_knowledge_graph: added line
          if not self._client:
              msg = (
                  "Ollama sync client is not initialized. "
