@@ -181,9 +181,9 @@ Here are a few numerical results. The markdown and sentences columns indicate th
 
 | Book | Markdown (Chuncker) | Sentences | # llm calls |
 | ---- | -------- | --------- | ----------- |
-| [Four Noble Truths](https://github.com/EricBoix/jj_doc_Four_Noble_Truths) | FIXME | FIXME | FIXME |
-| [Collecting Gold Dust](https://github.com/EricBoix/jj_doc_Collecting_Gold_Dust) | FIXME | FIXME | FIXME |
+| [Four Noble Truths](https://github.com/EricBoix/jj_doc_Four_Noble_Truths) | 1 | 0 | 1 |
 | [Rob Burbea](https://github.com/EricBoix/jj_doc_Rob_Burbea) | 7 | 258 | 265 |
+| [Collecting Gold Dust](https://github.com/EricBoix/jj_doc_Collecting_Gold_Dust) | FIXME | FIXME | FIXME |
 | [Zen flesh, zen bones](https://github.com/EricBoix/jj_doc_Zen_Flesh_Zen_Bones) | 45 (UnstructuredMarkdownLoader) | 2479 | 2524 |
 
 ## References
