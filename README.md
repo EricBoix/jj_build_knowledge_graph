@@ -51,10 +51,10 @@ pip install -r requirements.txt
 
 ```bash
 # Retrieve some input data e.g.
-git clone https://github.com/EricBoix/jj_doc_Four_Noble_Truths.git jj_doc_Four_Noble_Truths.git
+git clone https://github.com/EricBoix/jejune_doc_Four_Noble_Truths.git jejune_doc_Four_Noble_Truths.git
 # Extract the graph and store it in database
 python extracting_graph.py \
---input_directory jj_doc_Four_Noble_Truths.git/original_data/ \
+--input_directory jejune_doc_Four_Noble_Truths.git/original_data/ \
 --load_markdown_document 250_BCE_-_Dhammacakkappavattana_Sutta_Four_Noble_Truths_Wikipedia_translation.md
 ```
 
@@ -181,7 +181,7 @@ Here are a few numerical results. The markdown and sentences columns indicate th
 
 | Book | Markdown (Chuncker) | Sentences | # llm calls |
 | ---- | -------- | --------- | ----------- |
-| [Four Noble Truths](https://github.com/EricBoix/jj_doc_Four_Noble_Truths) | 1 | 0 | 1 |
+| [Four Noble Truths](https://github.com/EricBoix/jejune_doc_Four_Noble_Truths) | 1 | 0 | 1 |
 | [Rob Burbea](https://github.com/EricBoix/jj_doc_Rob_Burbea) | 7 | 258 | 265 |
 | [Collecting Gold Dust](https://github.com/EricBoix/jj_doc_Collecting_Gold_Dust) | FIXME | FIXME | FIXME |
 | [Zen flesh, zen bones](https://github.com/EricBoix/jj_doc_Zen_Flesh_Zen_Bones) | 45 (UnstructuredMarkdownLoader) | 2479 | 2524 |
